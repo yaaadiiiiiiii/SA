@@ -17,12 +17,15 @@ project.lock.json
 project.assets.json
 *.nuspec
 
+
 # Logs
 *.log
 
 # User-specific files
 *.sln.docstates
 *.userprefs
+*.packages.config
+*.Web.config
 
 # Rider or VS Code
 .idea/
