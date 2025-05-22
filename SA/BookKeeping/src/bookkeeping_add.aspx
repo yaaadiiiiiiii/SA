@@ -10,7 +10,7 @@
 	<title>記帳新增</title>
 </head>
 
-<body class="BookBod">
+<body class="BookBody">
 	<form runat="server">
 	<div class="BookContent">
 		<div class="BookRight">
