@@ -7,7 +7,7 @@
 <head runat="server">
 	<link rel="stylesheet" type="text/css" href="styles.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>記帳新增</title>
+	<title>記帳新增///</title>
 </head>
 
 <body class="BookBody">
