@@ -84,3 +84,6 @@ $RECYCLE.BIN/
 
 # Crash reports
 *.stackdump
+
+#packages
+.packages/
