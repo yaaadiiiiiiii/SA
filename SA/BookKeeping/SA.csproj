@@ -73,6 +73,9 @@
     <Reference Include="MySql.Data, Version=9.3.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.9.3.0\lib\net462\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
@@ -137,8 +140,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="src\add_recipe.aspx" />
     <Content Include="src\bookkeeping_add.aspx" />
     <Content Include="src\bookkeeping_search.aspx" />
+    <Content Include="src\browse_recipe.aspx" />
     <Content Include="src\DBtest.aspx" />
     <Content Include="src\images\ach.png" />
     <Content Include="src\images\ach_bg.png" />
@@ -299,6 +304,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\add_recipe.aspx.cs">
+      <DependentUpon>add_recipe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="src\add_recipe.aspx.designer.cs">
+      <DependentUpon>add_recipe.aspx</DependentUpon>
+    </Compile>
     <Compile Include="src\bookkeeping_add.aspx.cs">
       <DependentUpon>bookkeeping_add.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -312,6 +324,13 @@
     </Compile>
     <Compile Include="src\bookkeeping_search.aspx.designer.cs">
       <DependentUpon>bookkeeping_search.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="src\browse_recipe.aspx.cs">
+      <DependentUpon>browse_recipe.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="src\browse_recipe.aspx.designer.cs">
+      <DependentUpon>browse_recipe.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\DBtest.aspx.cs">
       <DependentUpon>DBtest.aspx</DependentUpon>
@@ -344,12 +363,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="src\season_ingredients.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\recipes\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
