@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: sa
 -- ------------------------------------------------------
--- Server version	8.0.32
+-- Server version	8.0.35
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,15 +33,6 @@ CREATE TABLE `comment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `comment`
---
-
-LOCK TABLES `comment` WRITE;
-/*!40000 ALTER TABLE `comment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `comment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `favorite`
 --
 
@@ -57,15 +48,6 @@ CREATE TABLE `favorite` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `favorite`
---
-
-LOCK TABLES `favorite` WRITE;
-/*!40000 ALTER TABLE `favorite` DISABLE KEYS */;
-/*!40000 ALTER TABLE `favorite` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ingredient`
 --
 
@@ -79,15 +61,6 @@ CREATE TABLE `ingredient` (
   PRIMARY KEY (`food_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ingredient`
---
-
-LOCK TABLES `ingredient` WRITE;
-/*!40000 ALTER TABLE `ingredient` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ingredient` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `recipe`
@@ -107,15 +80,6 @@ CREATE TABLE `recipe` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `recipe`
---
-
-LOCK TABLES `recipe` WRITE;
-/*!40000 ALTER TABLE `recipe` DISABLE KEYS */;
-/*!40000 ALTER TABLE `recipe` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user`
 --
 
@@ -123,22 +87,12 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `user_id` int NOT NULL,
+  `user_id` varchar(45) NOT NULL,
   `user_name` varchar(45) NOT NULL,
-  `account_name` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -149,4 +103,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-23 22:53:58
+-- Dump completed on 2025-05-30 16:08:04
