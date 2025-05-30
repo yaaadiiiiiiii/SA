@@ -18,30 +18,6 @@ namespace _BookKeeping
         protected void Page_Load(object sender, EventArgs e)
         {
             UnobtrusiveValidationMode = UnobtrusiveValidationMode.None;
-            Session["UserBirthDate"] = DateTime.Now;
-            if (IsPostBack)
-            {
-                // 获取用户选择的出生日期
-                if (DateTime.TryParse(Request.Form["BirthDate"], out DateTime birthdate))
-                {
-                    BirthDate = birthdate;
-                }
-            }
-            if (!IsPostBack)
-            {
-                // 检查 Session 是否包含生日值，如果不存在，则创建一个空的 Session 变量
-                if (Session["UserBirthDate"] == null)
-                {
-                    Session["UserBirthDate"] = DateTime.Now; // 设置为今天的日期
-                }
-
-                // 获取生日值并将其设置给日期选择器
-                DateTime birthDate = (DateTime)Session["UserBirthDate"];
-                BirthDate = birthDate;
-
-                // 更新日期选择器的值
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "SetBirthDate", "document.getElementById('BirthDate').value = '" + birthDate.ToString("yyyy-MM-dd") + "';", true);
-            }
 
         }
 
@@ -54,94 +30,34 @@ namespace _BookKeeping
         {
             string userid = RegAcc.Text;
             string nickname = RegNickname.Text;
-            string gender = RadioButton1.Checked ? "男生" : "女生";
             string password = RegPwd.Text;
-            string selectedQuestion1 = Question1.SelectedValue;
-            string answer1 = Answer1.Text;
             string confirmPassword = ReRegPwd.Text;
-            DateTime selectedDate = BirthDate.Date;
             string connectionStrings = ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
-            if (selectedDate != DateTime.MinValue)
-            {
-                // 将生日存储在 Session 中
-                Session["UserBirthDate"] = selectedDate;
-            }
 
             // 检查是否有字段为空
-            if (string.IsNullOrWhiteSpace(userid) || string.IsNullOrWhiteSpace(nickname) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(answer1))
+            if (string.IsNullOrWhiteSpace(userid) || string.IsNullOrWhiteSpace(nickname) || string.IsNullOrWhiteSpace(password))
             {
                 // 有一个或多个字段为空，显示错误消息
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_n_all.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
+                string script = "alert('請填寫所有欄位');";
                 ClientScript.RegisterStartupScript(GetType(), "請填寫所有欄位", script, true);
                 return; // 阻止注册流程
             }
 
-            //檢查是否有選擇性別
-            if (!RadioButton1.Checked && !RadioButton2.Checked)
-            {
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_n_all.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
-                ClientScript.RegisterStartupScript(GetType(), "請選擇性別", script, true);
-                return;
-            }
-
-            // 检查生日是否选择
-            if (selectedDate == DateTime.MinValue)
-            {
-                // 日期没有选择，显示错误消息
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_n_birthday.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
-                ClientScript.RegisterStartupScript(GetType(), "請選擇生日日期", script, true);
-                return; // 阻止注册流程
-            }
 
             // 检查帐号只包含英文和数字
             if (ContainsNonChineseCharacters(userid) || userid.Contains(" "))
             {
-                // 帐号包含非英文或数字字符，显示错误消息
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_id_rule.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
-                ClientScript.RegisterStartupScript(GetType(), "帳號只能含英文及數字", script, true);
-                return; // 阻止注册流程
+                string script = "alert('帳號只能包含英文與數字，且不能有空白');";
+                ClientScript.RegisterStartupScript(GetType(), "帳號格式錯誤", script, true);
+                return;
             }
 
             if(password.Length < 6 ||password.Length > 10)
             {
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_reg_pw.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
-                ClientScript.RegisterStartupScript(GetType(), "密碼只能為6~10位", script, true);
-                return; // 阻止注册流程
+                string script = "alert('密碼只能為 6~10 位');";
+                ClientScript.RegisterStartupScript(GetType(), "密碼格式錯誤", script, true);
+                return;
+
             }
 
             if (ContainsNonChineseCharacters(password) || password.Contains(" "))
@@ -161,94 +77,32 @@ namespace _BookKeeping
 
             if (ContainsNonChineseCharacters(confirmPassword) || confirmPassword.Contains(" "))
             {
-                // 帐号包含非英文或数字字符，显示错误消息
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_cpw_rule.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
-                ClientScript.RegisterStartupScript(GetType(), "確認密碼只能含英文及數字", script, true);
-                return; // 阻止注册流程
+                string script = "alert('確認密碼只能包含英文與數字，且不得包含空白字元');";
+                ClientScript.RegisterStartupScript(GetType(), "確認密碼格式錯誤", script, true);
+                return;
             }
 
-            // 检查密码和确认密码是否匹配
+
             if (password != confirmPassword)
             {
-                // 密码和确认密码不匹配，显示错误消息
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_pw_n_same.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
-                ClientScript.RegisterStartupScript(GetType(), "確認密碼不匹配", script, true);
-                return; // 阻止注册流程
+                string script = "alert('密碼與確認密碼不一致，請重新輸入');";
+                ClientScript.RegisterStartupScript(GetType(), "確認密碼不一致", script, true);
+                return;
             }
 
-            // 检查答案只包含中文
-            if (!ContainsChineseCharacters(answer1))
-            {
-                // 答案包含非中文字符，显示错误消息
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_ans_rule.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
-                ClientScript.RegisterStartupScript(GetType(), "安全答案只能含中文", script, true);
-                return; // 阻止注册流程
-            }
 
             if (IsUsernameAlreadyExists(userid))
             {
-                // 帐号已存在，显示错误消息
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_id_repeat.png';";
-                script += "imageBox.className = 'custom-image2';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
-                ClientScript.RegisterStartupScript(GetType(), "此帳號名稱已存在", script, true);
-                return; // 阻止注册流程
+                string script = "alert('此帳號名稱已存在，請重新輸入');";
+                ClientScript.RegisterStartupScript(GetType(), "帳號重複", script, true);
+                return;
             }
 
-            // 以上验证通过后，可以执行注册流程
 
-            string defaultClothing = string.Empty;
-            string defaultBody = string.Empty;
-            string defaultPet = string.Empty;
-            if (RadioButton1.Checked)
-            {
-                // 用户选择了男生，设置男性衣服的默认值
-                defaultClothing = "/src/images/cloth/defaulthead_b.png"; // 请根据实际情况设置男性衣服的值
-                defaultBody = "/src/images/cloth/defaultbody_b.png";
-                defaultPet = "/src/images/cloth/defaultpet.png";
-            }
-            else if (RadioButton2.Checked)
-            {
-                // 用户选择了女生，设置女性衣服的默认值
-                defaultClothing = "/src/images/cloth/defaulthead_g.png"; // 请根据实际情况设置女性衣服的值
-                defaultBody = "/src/images/cloth/defaultbody_g.png";
-                defaultPet = "/src/images/cloth/defaultpet.png";
-            }
 
-            string sql = "INSERT INTO `112-112502`.user (user_id, nickname, gender, password, question1, answer1, birthday, cloth, cloth2, pet) VALUES (@user_id, @nickname, @gender, @password, @question1, @answer1, @birthdate, @defaultBody, @defaultClothing, @defaultPet)";
-            string petsql = "INSERT INTO `112-112502`.achievement_complete (user_id, cloth_id, a_id) VALUES (@user_id, @pet, 'DP')";
-            string SQL = "INSERT INTO `112-112502`.achievement_complete (user_id, cloth_id, a_id) VALUES (@user_id, @cloth_id, 'DB')";
-            string clothSQL = "INSERT INTO `112-112502`.achievement_complete (user_id, cloth_id, a_id) VALUES (@user_id, @cloth_id, 'DH')";
+            string sql = "INSERT INTO `sa`.user (user_id, user_name, password) VALUES (@user_id, @user_name, @password)";
             int rowsaffected = 0;
-            int rowsAffetedPet = 0;
-            int rowsAffectedClothing = 0;
-            int rowsAffectedBody = 0;
+
             using (MySqlConnection conn = new MySqlConnection(connectionStrings)) 
             {
                 try
@@ -258,42 +112,9 @@ namespace _BookKeeping
                     using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@user_id", userid);
-                        cmd.Parameters.AddWithValue("@nickname", nickname);
-                        cmd.Parameters.AddWithValue("@gender", gender);
+                        cmd.Parameters.AddWithValue("@user_name", nickname);
                         cmd.Parameters.AddWithValue("@password", password);
-                        cmd.Parameters.AddWithValue("@question1", selectedQuestion1);
-                        cmd.Parameters.AddWithValue("@answer1", answer1);
-                        cmd.Parameters.AddWithValue("@birthdate", selectedDate);
-                        cmd.Parameters.AddWithValue("@defaultClothing", defaultClothing);
-                        cmd.Parameters.AddWithValue("@defaultBody", defaultBody);
-                        cmd.Parameters.AddWithValue("@defaultPet", defaultPet);
                         rowsaffected = cmd.ExecuteNonQuery();
-                    }
-                    using (MySqlCommand petcmd = new MySqlCommand(petsql, conn))
-                    {
-                        petcmd.Parameters.AddWithValue("@user_id", userid);
-                        petcmd.Parameters.AddWithValue("@pet", defaultPet);
-
-                        rowsAffetedPet = petcmd.ExecuteNonQuery();
-
-                        petcmd.Parameters.Clear();
-                    }
-                    using (MySqlCommand sqlcmd = new MySqlCommand(SQL, conn))
-                    {
-                        sqlcmd.Parameters.AddWithValue("@user_id", userid);
-                        sqlcmd.Parameters.AddWithValue("@cloth_id", defaultClothing); // 插入默认衣物的路径
-
-                        rowsAffectedClothing = sqlcmd.ExecuteNonQuery();
-
-                        sqlcmd.Parameters.Clear(); // 清除之前的参数
-                    }
-                    using (MySqlCommand clothcmd = new MySqlCommand(clothSQL, conn))
-                    {
-                        clothcmd.Parameters.AddWithValue("@user_id", userid);
-                        clothcmd.Parameters.AddWithValue("@cloth_id", defaultBody); // 插入默认身体的路径
-
-                        rowsAffectedBody = clothcmd.ExecuteNonQuery();
-
                     }
                 }
                 catch (Exception ex)
@@ -313,36 +134,21 @@ namespace _BookKeeping
 
             }
             // 彈出視窗
-            if (rowsaffected > 0 && rowsAffectedBody > 0 && rowsAffectedClothing > 0 &&rowsAffetedPet>0)
+            if (rowsaffected > 0)
             {
                 RegAcc.Text = "";
                 RegNickname.Text = "";
-                RadioButton1.Checked = false;
-                RadioButton2.Checked = false;
                 RegPwd.Text = "";
-                Answer1.Text = "";
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_5Y.png';";
-                script += "imageBox.className = 'custom-image';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; window.location.href = '" + ResolveUrl("~/src/login.aspx") + "'; }, 2000);"; // 显示图像一段时间后跳转
+                string script = "alert('註冊成功！即將前往登入頁面');";
+                script += "window.setTimeout(function() { window.location.href = '" + ResolveUrl("~/src/login.aspx") + "'; }, 10);";
                 ClientScript.RegisterStartupScript(GetType(), "註冊成功", script, true);
             }
             else
             {
-                string script = "var overlay = document.getElementById('overlay');";
-                script += "overlay.style.display = 'block';"; // 顯示背景遮罩
-                script += "var imageBox = document.createElement('img');";
-                script += "imageBox.src = 'images/alert_5N.png';";
-                script += "imageBox.className = 'custom-image';";
-                script += "document.body.appendChild(imageBox);";
-                script += "setTimeout(function() { overlay.style.display = 'none'; }, 2000);"; // 隱藏背景遮罩
-                script += "setTimeout(function() { imageBox.style.display = 'none'; }, 2000);"; // 自动隐藏图像
+                string script = "alert('註冊失敗，請稍後再試');";
                 ClientScript.RegisterStartupScript(GetType(), "註冊失敗", script, true);
             }
+
         }
 
 
@@ -350,7 +156,7 @@ namespace _BookKeeping
         {
             int count = 0;
             string connectionStrings = ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
-            string sql = "SELECT COUNT(*) FROM `112-112502`.user WHERE user_id = @userid";
+            string sql = "SELECT COUNT(*) FROM `sa`.user WHERE user_id = @userid";
             using (MySqlConnection conn = new MySqlConnection(connectionStrings))
             {
                 try
