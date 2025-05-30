@@ -131,23 +131,30 @@
             right: 15px;
             background: linear-gradient(145deg, #4ecdc4, #44a08d);
             color: white;
-            padding: 5px 12px;
+            padding: 8px 15px;
             border-radius: 20px;
-            font-size: 0.8em;
+            font-size: 0.9em;
             font-weight: bold;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .recipe-image {
             width: 100%;
             height: 200px;
-            background: #f0f0f0;
             border-radius: 10px;
             margin-bottom: 15px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+
+        .recipe-image.placeholder, .image-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
             color: #999;
             font-size: 0.9em;
+            background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
         }
 
         .recipe-title {
@@ -155,6 +162,12 @@
             font-weight: bold;
             color: #333;
             margin-bottom: 10px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .recipe-title:hover {
+            color: #667eea;
         }
 
         .recipe-description {
@@ -169,10 +182,25 @@
             margin-bottom: 15px;
         }
 
+        .recipe-steps {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+            line-height: 1.5;
+            color: #555;
+        }
+
+        .recipe-steps.show {
+            display: block;
+        }
+
         .recipe-actions {
             display: flex;
             gap: 10px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .favorite-btn {
@@ -194,7 +222,7 @@
             background: linear-gradient(145deg, #ffa726, #ff8f00);
         }
 
-        .comment-btn {
+        .comment-btn, .detail-btn {
             background: linear-gradient(145deg, #4ecdc4, #44a08d);
             border: none;
             border-radius: 20px;
@@ -205,7 +233,11 @@
             transition: all 0.3s ease;
         }
 
-        .comment-btn:hover {
+        .detail-btn {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+        }
+
+        .comment-btn:hover, .detail-btn:hover {
             transform: translateY(-2px);
         }
 
@@ -290,6 +322,10 @@
                 margin-bottom: 20px;
                 display: inline-block;
             }
+
+            .recipe-actions {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -307,7 +343,7 @@
         <div class="search-container">
             <div class="search-box">
                 <asp:TextBox ID="SearchTextBox" runat="server" CssClass="search-input" 
-                    placeholder="搜尋食譜名稱、食材、月份(1-12)或季節(春季/夏季/秋季/冬季)..."></asp:TextBox>
+                    placeholder="搜尋食譜名稱或食材"></asp:TextBox>
                 <asp:Button ID="SearchButton" runat="server" CssClass="search-btn" 
                     Text="搜尋" OnClick="SearchButton_Click" />
             </div>
@@ -322,16 +358,32 @@
                         </HeaderTemplate>
                         <ItemTemplate>
                             <div class="recipe-card">
-                                <%# Convert.ToBoolean(Eval("IsSeasonal")) ? "<div class=\"seasonal-badge\">當季推薦</div>" : "" %>
+                                <!-- 修正版的當季推薦標籤 -->
+                                <asp:Panel ID="SeasonalBadgePanel" runat="server" 
+                                    CssClass="seasonal-badge" 
+                                    Visible='<%# (bool)Eval("IsSeasonal") %>'>
+                                    🌟 當季推薦
+                                </asp:Panel>
                                 
-                                <div class="recipe-image">
-                                    <%# Eval("image") %>
+                                <asp:Image ID="RecipeImage" runat="server" 
+                                    ImageUrl='<%# Eval("image") %>' 
+                                    CssClass="recipe-image"
+                                    AlternateText='<%# Eval("title") %>'
+                                    onerror="handleImageError(this);" />
+                                
+                                <div class="recipe-title" onclick="toggleDetails(<%# Eval("recipe_id") %>)">
+                                    <%# Eval("title") %>
                                 </div>
-                                
-                                <div class="recipe-title"><%# Eval("title") %></div>
                                 <div class="recipe-description"><%# Eval("description") %></div>
                                 <div class="recipe-ingredients">
                                     <strong>食材：</strong><%# Eval("ingredients") %>
+                                </div>
+                                
+                                
+                                
+                                <div id="recipe-steps-<%# Eval("recipe_id") %>" class="recipe-steps">
+                                    <strong>製作步驟：</strong><br />
+                                    <%# Eval("steps") %>
                                 </div>
                                 
                                 <div class="recipe-actions">
@@ -340,6 +392,11 @@
                                         Text='<%# Convert.ToBoolean(Eval("IsFavorited")) ? "★ 已收藏" : "☆ 加入最愛" %>'
                                         CommandName="ToggleFavorite" 
                                         CommandArgument='<%# Eval("recipe_id") %>' />
+                                    
+                                    <button type="button" class="detail-btn" 
+                                        onclick="toggleDetails(<%# Eval("recipe_id") %>)">
+                                        📋 查看步驟
+                                    </button>
                                     
                                     <button type="button" class="comment-btn" 
                                         onclick="toggleComments(<%# Eval("recipe_id") %>)">
@@ -391,6 +448,38 @@
                 section.classList.remove('show');
             } else {
                 section.classList.add('show');
+            }
+        }
+
+        function toggleDetails(recipeId) {
+            var stepsSection = document.getElementById('recipe-steps-' + recipeId);
+            if (stepsSection.classList.contains('show')) {
+                stepsSection.classList.remove('show');
+            } else {
+                stepsSection.classList.add('show');
+            }
+        }
+
+        function handleImageError(img) {
+            // 防止無限迴圈
+            if (img.src.indexOf('default_recipe.jpg') === -1) {
+                // 獲取當前頁面的基礎路徑
+                var basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+                if (basePath.endsWith('/src')) {
+                    basePath = basePath.substring(0, basePath.lastIndexOf('/src'));
+                }
+                img.src = basePath + '/src/recipes/default_recipe.jpg';
+            } else {
+                // 如果預設圖片也載入失敗，顯示純色背景和文字
+                img.style.display = 'none';
+                var placeholder = img.nextElementSibling;
+                if (!placeholder || !placeholder.classList.contains('image-placeholder')) {
+                    placeholder = document.createElement('div');
+                    placeholder.className = 'recipe-image placeholder image-placeholder';
+                    placeholder.innerHTML = '📷 暫無圖片';
+                    img.parentNode.insertBefore(placeholder, img.nextSibling);
+                }
+                placeholder.style.display = 'flex';
             }
         }
     </script>

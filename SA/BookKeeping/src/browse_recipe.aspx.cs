@@ -66,23 +66,115 @@ namespace _BookKeeping.src
         {
             try
             {
-                string jsonPath = Server.MapPath("~/season_ingredients.json");
-                if (File.Exists(jsonPath))
+                // 嘗試多個可能的路徑
+                string[] possiblePaths = {
+                    Server.MapPath("~/season_ingredients.json"),
+                    Server.MapPath("~/src/season_ingredients.json"),
+                    Server.MapPath("../season_ingredients.json")
+                };
+
+                string jsonContent = "";
+                string foundPath = "";
+
+                foreach (string path in possiblePaths)
                 {
-                    string jsonContent = File.ReadAllText(jsonPath);
+                    System.Diagnostics.Debug.WriteLine("嘗試路徑: " + path);
+                    if (File.Exists(path))
+                    {
+                        jsonContent = File.ReadAllText(path);
+                        foundPath = path;
+                        System.Diagnostics.Debug.WriteLine("找到檔案: " + path);
+                        break;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(jsonContent))
+                {
                     seasonalIngredients = JsonConvert.DeserializeObject<List<SeasonalIngredient>>(jsonContent);
+                    System.Diagnostics.Debug.WriteLine("成功載入 " + seasonalIngredients.Count + " 個季節食材");
+
+                    // 顯示當前月份的食材（除錯用）
+                    int currentMonth = DateTime.Now.Month;
+                    string currentSeason = GetCurrentSeason(currentMonth);
+                    System.Diagnostics.Debug.WriteLine("當前月份: " + currentMonth + ", 當前季節: " + currentSeason);
+
+                    var currentMonthIngredients = seasonalIngredients.Where(si => si.Month == currentMonth).ToList();
+                    System.Diagnostics.Debug.WriteLine("當月食材: " + string.Join(", ", currentMonthIngredients.Select(i => i.Name)));
+
+                    var currentSeasonIngredients = seasonalIngredients.Where(si => si.Season == currentSeason).ToList();
+                    System.Diagnostics.Debug.WriteLine("當季食材: " + string.Join(", ", currentSeasonIngredients.Select(i => i.Name)));
                 }
                 else
                 {
+                    System.Diagnostics.Debug.WriteLine("無法找到 season_ingredients.json 檔案");
                     seasonalIngredients = new List<SeasonalIngredient>();
+
+                    // 建立測試用的季節食材資料
+                    CreateTestSeasonalIngredients();
                 }
             }
             catch (Exception ex)
             {
-                // 記錄錯誤，使用空清單
-                System.Diagnostics.Debug.WriteLine("LoadSeasonalIngredients error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("LoadSeasonalIngredients 錯誤: " + ex.Message);
                 seasonalIngredients = new List<SeasonalIngredient>();
+
+                // 建立測試用的季節食材資料
+                CreateTestSeasonalIngredients();
             }
+        }
+
+        // 建立測試用的季節食材資料
+        private void CreateTestSeasonalIngredients()
+        {
+            int currentMonth = DateTime.Now.Month;
+            seasonalIngredients = new List<SeasonalIngredient>();
+
+            // 根據當前月份建立測試資料
+            switch (currentMonth)
+            {
+                case 1:
+                case 2:
+                case 12: // 冬季
+                    seasonalIngredients.AddRange(new[] {
+                        new SeasonalIngredient { Month = currentMonth, Season = "冬季", Name = "高麗菜" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "冬季", Name = "白蘿蔔" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "冬季", Name = "菠菜" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "冬季", Name = "花椰菜" }
+                    });
+                    break;
+                case 3:
+                case 4:
+                case 5: // 春季
+                    seasonalIngredients.AddRange(new[] {
+                        new SeasonalIngredient { Month = currentMonth, Season = "春季", Name = "蘆筍" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "春季", Name = "番茄" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "春季", Name = "小黃瓜" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "春季", Name = "茄子" }
+                    });
+                    break;
+                case 6:
+                case 7:
+                case 8: // 夏季
+                    seasonalIngredients.AddRange(new[] {
+                        new SeasonalIngredient { Month = currentMonth, Season = "夏季", Name = "苦瓜" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "夏季", Name = "茄子" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "夏季", Name = "絲瓜" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "夏季", Name = "空心菜" }
+                    });
+                    break;
+                case 9:
+                case 10:
+                case 11: // 秋季
+                    seasonalIngredients.AddRange(new[] {
+                        new SeasonalIngredient { Month = currentMonth, Season = "秋季", Name = "南瓜" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "秋季", Name = "地瓜" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "秋季", Name = "芋頭" },
+                        new SeasonalIngredient { Month = currentMonth, Season = "秋季", Name = "高麗菜" }
+                    });
+                    break;
+            }
+
+            System.Diagnostics.Debug.WriteLine("建立測試用季節食材: " + string.Join(", ", seasonalIngredients.Select(i => i.Name)));
         }
 
         private void LoadRecipes(string searchTerm = "")
@@ -93,6 +185,10 @@ namespace _BookKeeping.src
 
                 // 按當季食材優先排序
                 recipes = recipes.OrderByDescending(r => r.IsSeasonal).ThenBy(r => r.title).ToList();
+
+                // 除錯：顯示有多少當季食譜
+                int seasonalCount = recipes.Count(r => r.IsSeasonal);
+                System.Diagnostics.Debug.WriteLine("找到 " + seasonalCount + " 個當季食譜，總計 " + recipes.Count + " 個食譜");
 
                 if (recipes.Count > 0)
                 {
@@ -109,7 +205,7 @@ namespace _BookKeeping.src
             }
             catch (Exception ex)
             {
-                // 處理錯誤
+                System.Diagnostics.Debug.WriteLine("LoadRecipes 錯誤: " + ex.Message);
                 NoRecipesLabel.Text = "載入食譜時發生錯誤：" + ex.Message;
                 NoRecipesLabel.Visible = true;
             }
@@ -119,8 +215,6 @@ namespace _BookKeeping.src
         {
             List<RecipeData> recipes = new List<RecipeData>();
             string currentUserId = Session["UserID"].ToString();
-            int currentMonth = DateTime.Now.Month;
-            string currentSeason = GetCurrentSeason(currentMonth);
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
@@ -155,16 +249,30 @@ namespace _BookKeeping.src
                     {
                         while (reader.Read())
                         {
+                            string imageFromDB = reader.GetString("image");
+                            string imagePath = ProcessImagePath(imageFromDB);
+                            string ingredients = reader.GetString("ingredients");
+                            string title = reader.GetString("title");
+
+                            bool isSeasonal = IsRecipeSeasonal(ingredients, title);
+
+                            // 詳細除錯資訊
+                            System.Diagnostics.Debug.WriteLine("=== 食譜分析 ===");
+                            System.Diagnostics.Debug.WriteLine("食譜名稱: " + title);
+                            System.Diagnostics.Debug.WriteLine("食材內容: " + ingredients);
+                            System.Diagnostics.Debug.WriteLine("是否當季: " + isSeasonal);
+                            System.Diagnostics.Debug.WriteLine("================");
+
                             var recipe = new RecipeData
                             {
                                 recipe_id = reader.GetInt32("recipe_id"),
-                                title = reader.GetString("title"),
+                                title = title,
                                 description = reader.GetString("description"),
                                 steps = reader.GetString("steps"),
-                                image = "~/"+reader.GetString("image"),
-                                ingredients = reader.GetString("ingredients"), // 移除 IsDBNull 檢查，因為已用 COALESCE 處理
+                                image = imagePath,
+                                ingredients = ingredients,
                                 IsFavorited = reader.GetInt32("is_favorited") == 1,
-                                IsSeasonal = IsRecipeSeasonal(reader.GetString("ingredients")),
+                                IsSeasonal = isSeasonal,
                                 Comments = new List<CommentData>()
                             };
                             recipes.Add(recipe);
@@ -172,33 +280,55 @@ namespace _BookKeeping.src
                     }
                 }
 
-                // 載入每個食譜的評論 - 修正：在 using 區塊內調用
+                // 載入每個食譜的評論
                 foreach (var recipe in recipes)
                 {
                     recipe.Comments = GetRecipeComments(conn, recipe.recipe_id);
                 }
-            } // 連線在這裡才會被釋放
+            }
 
             return recipes;
+        }
+
+        private string ProcessImagePath(string imageFromDB)
+        {
+            if (string.IsNullOrEmpty(imageFromDB) || string.IsNullOrWhiteSpace(imageFromDB))
+            {
+                return "~/src/recipes/default_recipe.jpg";
+            }
+
+            if (imageFromDB.StartsWith("src/recipes/"))
+            {
+                return "~/" + imageFromDB;
+            }
+
+            if (!imageFromDB.Contains("/") && !string.IsNullOrEmpty(imageFromDB))
+            {
+                return "~/src/recipes/" + imageFromDB;
+            }
+
+            if (string.IsNullOrEmpty(imageFromDB) || imageFromDB.Trim() == "")
+            {
+                return "~/src/recipes/default_recipe.jpg";
+            }
+
+            return "~/" + imageFromDB.TrimStart('/');
         }
 
         private string BuildSearchWhereClause(string searchTerm, List<MySqlParameter> parameters)
         {
             searchTerm = searchTerm.Trim();
 
-            // 檢查是否為月份搜尋 (1-12)
             if (int.TryParse(searchTerm, out int month) && month >= 1 && month <= 12)
             {
                 return BuildSeasonalSearchQuery(month, "", parameters);
             }
 
-            // 檢查是否為季節搜尋
             if (searchTerm.Contains("季"))
             {
                 return BuildSeasonalSearchQuery(0, searchTerm, parameters);
             }
 
-            // 一般搜尋 (食譜名稱或食材)
             parameters.Add(new MySqlParameter("@searchTerm", "%" + searchTerm + "%"));
             return " WHERE (r.title LIKE @searchTerm OR i.food_name LIKE @searchTerm)";
         }
@@ -236,21 +366,73 @@ namespace _BookKeeping.src
                 return " WHERE (" + foodConditions + ")";
             }
 
-            return " WHERE 1=0"; // 沒有找到當季食材，返回空結果
+            return " WHERE 1=0";
         }
 
-        private bool IsRecipeSeasonal(string ingredients)
+        // 簡化且強化的季節判斷方法
+        private bool IsRecipeSeasonal(string ingredients, string title)
         {
-            if (string.IsNullOrEmpty(ingredients) || seasonalIngredients == null)
+            if (seasonalIngredients == null || seasonalIngredients.Count == 0)
+            {
+                System.Diagnostics.Debug.WriteLine("季節食材清單為空");
                 return false;
+            }
+
+            if (string.IsNullOrEmpty(ingredients))
+            {
+                System.Diagnostics.Debug.WriteLine("食材清單為空");
+                return false;
+            }
 
             int currentMonth = DateTime.Now.Month;
+            string currentSeason = GetCurrentSeason(currentMonth);
+
+            // 獲取當月和當季的所有食材
             var currentSeasonalFoods = seasonalIngredients
-                .Where(si => si.Month == currentMonth)
+                .Where(si => si.Month == currentMonth || si.Season == currentSeason)
                 .Select(si => si.Name)
+                .Distinct()
                 .ToList();
 
-            return currentSeasonalFoods.Any(food => ingredients.Contains(food));
+            System.Diagnostics.Debug.WriteLine("檢查食譜: " + title);
+            System.Diagnostics.Debug.WriteLine("當前季節食材: " + string.Join(", ", currentSeasonalFoods));
+            System.Diagnostics.Debug.WriteLine("食譜食材: " + ingredients);
+
+            // 簡化的匹配邏輯
+            foreach (var seasonalFood in currentSeasonalFoods)
+            {
+                // 直接檢查是否包含
+                if (ingredients.Contains(seasonalFood))
+                {
+                    System.Diagnostics.Debug.WriteLine("找到匹配的季節食材: " + seasonalFood);
+                    return true;
+                }
+
+                // 檢查食譜標題是否包含季節食材
+                if (title.Contains(seasonalFood))
+                {
+                    System.Diagnostics.Debug.WriteLine("標題包含季節食材: " + seasonalFood);
+                    return true;
+                }
+            }
+
+            // 更寬鬆的匹配：檢查關鍵字
+            foreach (var seasonalFood in currentSeasonalFoods)
+            {
+                // 如果季節食材名稱長度 >= 2，檢查前兩個字
+                if (seasonalFood.Length >= 2)
+                {
+                    string keyWord = seasonalFood.Substring(0, 2);
+                    if (ingredients.Contains(keyWord) || title.Contains(keyWord))
+                    {
+                        System.Diagnostics.Debug.WriteLine("找到關鍵字匹配: " + keyWord + " (來自 " + seasonalFood + ")");
+                        return true;
+                    }
+                }
+            }
+
+            System.Diagnostics.Debug.WriteLine("未找到匹配的季節食材");
+            return false;
         }
 
         private List<CommentData> GetRecipeComments(MySqlConnection conn, int recipeId)
@@ -326,10 +508,9 @@ namespace _BookKeeping.src
 
             string currentUserId = Session["UserID"].ToString();
 
-            // Fix: Convert CommandArgument to int properly
             if (!int.TryParse(e.CommandArgument.ToString(), out int recipeId))
             {
-                return; // Invalid recipe ID
+                return;
             }
 
             if (e.CommandName == "ToggleFavorite")
@@ -346,7 +527,6 @@ namespace _BookKeeping.src
                 }
             }
 
-            // 重新載入食譜以更新狀態
             LoadSeasonalIngredients();
             LoadRecipes(SearchTextBox.Text);
         }
@@ -359,7 +539,6 @@ namespace _BookKeeping.src
                 {
                     conn.Open();
 
-                    // 檢查是否已收藏
                     string checkQuery = "SELECT COUNT(*) FROM favorite WHERE user_id = @userId AND recipe_id = @recipeId";
                     using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, conn))
                     {
@@ -370,7 +549,6 @@ namespace _BookKeeping.src
 
                         if (count > 0)
                         {
-                            // 移除收藏
                             string deleteQuery = "DELETE FROM favorite WHERE user_id = @userId AND recipe_id = @recipeId";
                             using (MySqlCommand deleteCmd = new MySqlCommand(deleteQuery, conn))
                             {
@@ -381,7 +559,6 @@ namespace _BookKeeping.src
                         }
                         else
                         {
-                            // 新增收藏
                             string insertQuery = "INSERT INTO favorite (user_id, recipe_id, add_date) VALUES (@userId, @recipeId, @addDate)";
                             using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, conn))
                             {
@@ -396,8 +573,7 @@ namespace _BookKeeping.src
             }
             catch (Exception ex)
             {
-                // 處理錯誤 - Log the error for debugging
-                System.Diagnostics.Debug.WriteLine("ToggleFavorite error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("ToggleFavorite 錯誤: " + ex.Message);
             }
         }
 
@@ -422,8 +598,7 @@ namespace _BookKeeping.src
             }
             catch (Exception ex)
             {
-                // 處理錯誤 - Log the error for debugging
-                System.Diagnostics.Debug.WriteLine("AddComment error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("AddComment 錯誤: " + ex.Message);
             }
         }
     }

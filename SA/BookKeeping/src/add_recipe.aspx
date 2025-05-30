@@ -341,9 +341,11 @@
                 <asp:Button ID="SaveRecipeBtn" runat="server" CssClass="btn-primary" 
                     Text="💾 儲存食譜" OnClick="SaveRecipeBtn_Click" />
                 <asp:Button ID="BackToMainBtn" runat="server" CssClass="btn-info" 
-                    Text="🏠 返回主頁面" OnClick="BackToMainBtn_Click" CausesValidation="false" />
+                    Text="🏠 返回主頁面" OnClick="BackToMainBtn_Click" CausesValidation="false" 
+                    formnovalidate="formnovalidate" />
                 <asp:Button ID="CancelBtn" runat="server" CssClass="btn-secondary" 
-                    Text="❌ 取消" OnClick="CancelBtn_Click" CausesValidation="false" />
+                    Text="❌ 取消" OnClick="CancelBtn_Click" CausesValidation="false" 
+                    formnovalidate="formnovalidate" />
             </div>
         </div>
     </form>
