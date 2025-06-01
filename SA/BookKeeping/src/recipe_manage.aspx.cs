@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace _BookKeeping
 {
-    public partial class recipe_manager : System.Web.UI.Page
+    public partial class recipe_manage : System.Web.UI.Page
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
         private string imageUploadPath = "~/src/recipes/";

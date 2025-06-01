@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace _BookKeeping
 {
-    public partial class ingredient_manager : System.Web.UI.Page
+    public partial class ingredient_manage : System.Web.UI.Page
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
 

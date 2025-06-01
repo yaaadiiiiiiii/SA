@@ -1,11 +1,11 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="recipe_manager.aspx.cs" Inherits="_BookKeeping.recipe_manager" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ingredient_manage.aspx.cs" Inherits="_BookKeeping.ingredient_manage" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>食譜管理系統</title>
+    <title>食材管理系統</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Microsoft JhengHei', Arial, sans-serif;
-            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -38,7 +38,7 @@
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            color: #FF6B6B;
+            color: #4CAF50;
         }
 
         .function-tabs {
@@ -61,12 +61,12 @@
         }
 
         .tab-btn.active {
-            background: #FF6B6B;
+            background: #4CAF50;
             transform: translateY(-2px);
         }
 
         .tab-btn:hover {
-            background: #FF8E53;
+            background: #45a049;
             transform: translateY(-2px);
         }
 
@@ -103,22 +103,12 @@
         }
 
         .form-control:focus {
-            border-color: #FF6B6B;
+            border-color: #4CAF50;
             outline: none;
         }
 
-        .form-control-textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        .form-control-steps {
-            height: 150px;
-            resize: vertical;
-        }
-
         .btn-primary {
-            background: linear-gradient(145deg, #FF6B6B, #FF8E53);
+            background: linear-gradient(145deg, #4CAF50, #45a049);
             border: none;
             border-radius: 10px;
             padding: 12px 30px;
@@ -132,7 +122,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
         }
 
         .btn-success {
@@ -209,74 +199,12 @@
             flex: 1;
         }
 
-        .recipe-preview {
+        .ingredient-preview {
             background: white;
             border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-            border-left: 4px solid #FF6B6B;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .recipe-preview h4 {
-            color: #FF6B6B;
-            margin-bottom: 10px;
-            font-size: 1.3em;
-        }
-
-        .recipe-preview .description {
-            color: #666;
-            margin-bottom: 10px;
-            font-style: italic;
-        }
-
-        .recipe-preview .steps {
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            white-space: pre-line;
-            margin-bottom: 10px;
-        }
-
-        .recipe-preview .image-info {
-            color: #888;
-            font-size: 0.9em;
-        }
-
-        .file-upload-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-upload-input {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .file-upload-label {
-            display: block;
-            padding: 12px;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            text-align: center;
-            background: #f8f9fa;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload-label:hover {
-            border-color: #FF6B6B;
-            background: #fff;
-        }
-
-        .file-upload-label.has-file {
-            border-color: #28a745;
-            background: #d4edda;
-            color: #155724;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
         }
 
         @media (max-width: 768px) {
@@ -333,7 +261,7 @@
         }
 
         function confirmDelete() {
-            return confirm('確定要刪除這個食譜嗎？此操作無法復原，且相關的食材也會一併刪除。');
+            return confirm('確定要刪除這個食材嗎？此操作無法復原。');
         }
 
         function showTabByName(tabName) {
@@ -359,18 +287,6 @@
             var targetButton = document.querySelector(`button[onclick*="showTab('${tabName}')"]`);
             if (targetButton) {
                 targetButton.classList.add('active');
-            }
-        }
-
-        // 處理檔案上傳顯示
-        function handleFileSelect(input, labelId) {
-            var label = document.getElementById(labelId);
-            if (input.files && input.files[0]) {
-                label.textContent = '已選擇檔案: ' + input.files[0].name;
-                label.classList.add('has-file');
-            } else {
-                label.textContent = '點擊選擇圖片檔案 (JPG, PNG, GIF)';
-                label.classList.remove('has-file');
             }
         }
 
@@ -409,22 +325,22 @@
         
         <div class="container">
             <div class="header">
-                <h1>📖 食譜管理系統</h1>
-                <p>管理您的美味食譜集合</p>
+                <h1>🥬 食材管理系統</h1>
+                <p>管理您的食譜食材配方</p>
             </div>
 
             <!-- 功能分頁按鈕 -->
             <div class="function-tabs">
-                <button type="button" class="tab-btn" onclick="showTab('add')">新增食譜</button>
-                <button type="button" class="tab-btn" onclick="showTab('edit')">修改食譜</button>
-                <button type="button" class="tab-btn" onclick="showTab('delete')">刪除食譜</button>
+                <button type="button" class="tab-btn" onclick="showTab('add')">新增食材</button>
+                <button type="button" class="tab-btn" onclick="showTab('edit')">修改食材</button>
+                <button type="button" class="tab-btn" onclick="showTab('delete')">刪除食材</button>
             </div>
 
             <asp:HiddenField ID="CurrentTab" runat="server" Value="add" />
 
-            <!-- 新增食譜分頁 -->
+            <!-- 新增食材分頁 -->
             <div id="addTab" class="tab-content">
-                <h2>📝 新增食譜</h2>
+                <h2>📝 新增食材</h2>
                 
                 <!-- 新增功能的訊息顯示區域 -->
                 <asp:Panel ID="AddMessagePanel" runat="server" Visible="false">
@@ -434,36 +350,29 @@
                 </asp:Panel>
                 
                 <div class="form-group">
-                    <label>食譜標題：</label>
-                    <asp:TextBox ID="AddTitle" runat="server" CssClass="form-control" placeholder="請輸入食譜標題"></asp:TextBox>
+                    <label>選擇食譜：</label>
+                    <asp:DropDownList ID="AddRecipeDropDown" runat="server" CssClass="form-control">
+                    </asp:DropDownList>
                 </div>
-                <div class="form-group">
-                    <label>食譜描述：</label>
-                    <asp:TextBox ID="AddDescription" runat="server" CssClass="form-control form-control-textarea" 
-                        TextMode="MultiLine" placeholder="請輸入食譜描述"></asp:TextBox>
-                </div>
-                <div class="form-group">
-                    <label>製作步驟：</label>
-                    <asp:TextBox ID="AddSteps" runat="server" CssClass="form-control form-control-steps" 
-                        TextMode="MultiLine" placeholder="請輸入製作步驟，可換行描述"></asp:TextBox>
-                </div>
-                <div class="form-group">
-                    <label>食譜圖片：</label>
-                    <div class="file-upload-wrapper">
-                        <asp:FileUpload ID="AddImageUpload" runat="server" CssClass="file-upload-input" 
-                            onchange="handleFileSelect(this, 'addFileLabel')" accept="image/*" />
-                        <label id="addFileLabel" class="file-upload-label">點擊選擇圖片檔案 (JPG, PNG, GIF)</label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>食材名稱：</label>
+                        <asp:TextBox ID="AddFoodName" runat="server" CssClass="form-control" placeholder="請輸入食材名稱"></asp:TextBox>
+                    </div>
+                    <div class="form-group">
+                        <label>數量：</label>
+                        <asp:TextBox ID="AddQuantity" runat="server" CssClass="form-control" placeholder="如：200g、2顆、適量"></asp:TextBox>
                     </div>
                 </div>
                 <div class="form-group">
-                    <asp:Button ID="SaveAddBtn" runat="server" CssClass="btn-success" Text="💾 新增食譜" OnClick="SaveAddBtn_Click" />
+                    <asp:Button ID="SaveAddBtn" runat="server" CssClass="btn-success" Text="💾 新增食材" OnClick="SaveAddBtn_Click" />
                 </div>
             </div>
 
-            <!-- 修改食譜分頁 -->
+            <!-- 修改食材分頁 -->
             <div id="editTab" class="tab-content">
-                <h2>✏️ 修改食譜</h2>
-
+                <h2>✏️ 修改食材</h2>
+    
                 <asp:UpdatePanel ID="EditUpdatePanel" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                         <!-- 修改功能的訊息顯示區域 -->
@@ -472,43 +381,26 @@
                                 <asp:Label ID="EditMessageLabel" runat="server"></asp:Label>
                             </div>
                         </asp:Panel>
-            
+                        
                         <div class="form-group">
-                            <label>選擇要修改的食譜：</label>
-                            <asp:DropDownList ID="EditRecipeDropDown" runat="server" CssClass="form-control" 
-                                AutoPostBack="true" OnSelectedIndexChanged="EditRecipeDropDown_SelectedIndexChanged">
+                            <label>選擇要修改的食材：</label>
+                            <asp:DropDownList ID="EditIngredientDropDown" runat="server" CssClass="form-control" 
+                                AutoPostBack="true" OnSelectedIndexChanged="EditIngredientDropDown_SelectedIndexChanged">
                             </asp:DropDownList>
                         </div>
                         <div class="form-group">
-                            <label>食譜標題：</label>
-                            <asp:TextBox ID="EditTitle" runat="server" CssClass="form-control"></asp:TextBox>
+                            <label>所屬食譜：</label>
+                            <asp:DropDownList ID="EditRecipeDropDown" runat="server" CssClass="form-control">
+                            </asp:DropDownList>
                         </div>
-                        <div class="form-group">
-                            <label>食譜描述：</label>
-                            <asp:TextBox ID="EditDescription" runat="server" CssClass="form-control form-control-textarea" 
-                                TextMode="MultiLine"></asp:TextBox>
-                        </div>
-                        <div class="form-group">
-                            <label>製作步驟：</label>
-                            <asp:TextBox ID="EditSteps" runat="server" CssClass="form-control form-control-steps" 
-                                TextMode="MultiLine"></asp:TextBox>
-                        </div>
-                        <div class="form-group">
-                            <label>更換食譜圖片：(可選，不選擇則保持原圖片)</label>
-                            <div class="file-upload-wrapper">
-                                <asp:FileUpload ID="EditImageUpload" runat="server" CssClass="file-upload-input" 
-                                    onchange="handleFileSelect(this, 'editFileLabel')" accept="image/*" />
-                                <label id="editFileLabel" class="file-upload-label">點擊選擇新圖片檔案 (JPG, PNG, GIF)</label>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>食材名稱：</label>
+                                <asp:TextBox ID="EditFoodName" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
-                            <!-- 顯示目前圖片區域 -->
-                            <div class="current-image-preview" style="margin-top: 15px;">
-                                <strong>目前圖片：</strong><br />
-                                <asp:Image ID="CurrentImage" runat="server" 
-                                    style="max-width: 300px; max-height: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 8px;" 
-                                    AlternateText="目前食譜圖片" />
-                                <div style="margin-top: 5px; color: #666; font-size: 0.9em;">
-                                    檔案名稱：<asp:Label ID="CurrentImageLabel" runat="server"></asp:Label>
-                                </div>
+                            <div class="form-group">
+                                <label>數量：</label>
+                                <asp:TextBox ID="EditQuantity" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                         <div class="form-group">
@@ -517,16 +409,16 @@
                         </div>
                     </ContentTemplate>
                     <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="EditRecipeDropDown" EventName="SelectedIndexChanged" />
-                        <asp:PostBackTrigger ControlID="SaveEditBtn" />
+                        <asp:AsyncPostBackTrigger ControlID="EditIngredientDropDown" EventName="SelectedIndexChanged" />
+                        <asp:AsyncPostBackTrigger ControlID="SaveEditBtn" EventName="Click" />
                     </Triggers>
                 </asp:UpdatePanel>
             </div>
 
-            <!-- 刪除食譜分頁 -->
+            <!-- 刪除食材分頁 -->
             <div id="deleteTab" class="tab-content">
-                <h2>🗑️ 刪除食譜</h2>
-
+                <h2>🗑️ 刪除食材</h2>
+    
                 <asp:UpdatePanel ID="DeleteUpdatePanel" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                         <!-- 刪除功能的訊息顯示區域 -->
@@ -535,32 +427,23 @@
                                 <asp:Label ID="DeleteMessageLabel" runat="server"></asp:Label>
                             </div>
                         </asp:Panel>
-            
+                        
                         <div class="form-group">
-                            <label>選擇要刪除的食譜：</label>
-                            <asp:DropDownList ID="DeleteRecipeDropDown" runat="server" CssClass="form-control" 
-                                AutoPostBack="true" OnSelectedIndexChanged="DeleteRecipeDropDown_SelectedIndexChanged">
+                            <label>選擇要刪除的食材：</label>
+                            <asp:DropDownList ID="DeleteIngredientDropDown" runat="server" CssClass="form-control" 
+                                AutoPostBack="true" OnSelectedIndexChanged="DeleteIngredientDropDown_SelectedIndexChanged">
                             </asp:DropDownList>
                         </div>
                         <asp:Panel ID="DeletePreviewPanel" runat="server" Visible="false">
-                            <div class="recipe-preview">
-                                <h4><asp:Label ID="DeletePreviewTitle" runat="server"></asp:Label></h4>
-                                <div class="description">
-                                    <asp:Label ID="DeletePreviewDescription" runat="server"></asp:Label>
+                            <div class="ingredient-preview">
+                                <div class="ingredient-title">
+                                    <asp:Label ID="DeletePreviewName" runat="server"></asp:Label>
                                 </div>
-                                <div class="steps">
-                                    <strong>製作步驟：</strong><br />
-                                    <asp:Label ID="DeletePreviewSteps" runat="server"></asp:Label>
+                                <div class="ingredient-recipe">
+                                    所屬食譜：<asp:Label ID="DeletePreviewRecipe" runat="server"></asp:Label>
                                 </div>
-                                <!-- 新增圖片顯示區域 -->
-                                <div class="recipe-image-preview" style="margin: 15px 0;">
-                                    <strong>食譜圖片：</strong><br />
-                                    <asp:Image ID="DeletePreviewImage" runat="server" 
-                                        style="max-width: 300px; max-height: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 8px;" 
-                                        AlternateText="食譜圖片" />
-                                    <div class="image-info" style="margin-top: 5px;">
-                                        檔案名稱：<asp:Label ID="DeletePreviewImageName" runat="server"></asp:Label>
-                                    </div>
+                                <div class="ingredient-quantity">
+                                    數量：<asp:Label ID="DeletePreviewQuantity" runat="server"></asp:Label>
                                 </div>
                             </div>
                         </asp:Panel>
@@ -571,7 +454,7 @@
                         </div>
                     </ContentTemplate>
                     <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="DeleteRecipeDropDown" EventName="SelectedIndexChanged" />
+                        <asp:AsyncPostBackTrigger ControlID="DeleteIngredientDropDown" EventName="SelectedIndexChanged" />
                         <asp:AsyncPostBackTrigger ControlID="ConfirmDeleteBtn" EventName="Click" />
                     </Triggers>
                 </asp:UpdatePanel>

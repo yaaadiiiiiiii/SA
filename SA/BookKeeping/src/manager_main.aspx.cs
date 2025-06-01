@@ -30,13 +30,13 @@ namespace _BookKeeping
         protected void RecipeManageBtn_Click(object sender, EventArgs e)
         {
             // 導向到食譜管理頁面
-            Response.Redirect("~/src/recipe_manager.aspx");
+            Response.Redirect("~/src/recipe_manage.aspx");
         }
 
         protected void FoodManageBtn_Click(Object sender, EventArgs e)
         {
             // 導向到食材管理頁面
-            Response.Redirect("~/src/ingredient_manager.aspx"); 
+            Response.Redirect("~/src/ingredient_manage.aspx"); 
         }
 
         protected void LogoutBtn_Click(object sender, EventArgs e)

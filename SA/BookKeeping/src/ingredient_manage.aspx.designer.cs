@@ -11,7 +11,7 @@ namespace _BookKeeping
 {
 
 
-    public partial class ingredient_manager
+    public partial class ingredient_manage
     {
 
         /// <summary>

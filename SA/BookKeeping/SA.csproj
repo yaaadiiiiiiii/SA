@@ -145,8 +145,8 @@
     <Content Include="src\bookkeeping_search.aspx" />
     <Content Include="src\browse_recipe.aspx" />
     <Content Include="src\DBtest.aspx" />
-    <Content Include="src\ingredient_manager.aspx" />
-    <Content Include="src\recipe_manager.aspx" />
+    <Content Include="src\ingredient_manage.aspx" />
+    <Content Include="src\recipe_manage.aspx" />
     <Content Include="src\images\ach.png" />
     <Content Include="src\images\ach_bg.png" />
     <Content Include="src\images\back.png" />
@@ -342,6 +342,13 @@
     <Compile Include="src\DBtest.aspx.designer.cs">
       <DependentUpon>DBtest.aspx</DependentUpon>
     </Compile>
+    <Compile Include="src\ingredient_manage.aspx.cs">
+      <DependentUpon>ingredient_manage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="src\ingredient_manage.aspx.designer.cs">
+      <DependentUpon>ingredient_manage.aspx</DependentUpon>
+    </Compile>
     <Compile Include="src\login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -362,6 +369,13 @@
     </Compile>
     <Compile Include="src\main.aspx.designer.cs">
       <DependentUpon>main.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="src\recipe_manage.aspx.cs">
+      <DependentUpon>recipe_manage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="src\recipe_manage.aspx.designer.cs">
+      <DependentUpon>recipe_manage.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\register.aspx.cs">
       <DependentUpon>register.aspx</DependentUpon>
