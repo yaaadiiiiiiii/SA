@@ -51,9 +51,23 @@ namespace _BookKeeping
                             if (reader.Read())
                             {
                                 Session["UserID"] = UserAcc.Text;
-                                Session["UserName"] = reader["user_name"].ToString(); 
-                                // 成功
-                                Response.Redirect("~/src/main.aspx");
+                                Session["UserName"] = reader["user_name"].ToString();
+
+                                // 判斷是否為管理者（帳號前面有A）
+                                bool isManager = UserAcc.Text.ToUpper().StartsWith("A");
+                                Session["IsManager"] = isManager;
+
+                                // 根據用戶類型導向不同頁面
+                                if (isManager)
+                                {
+                                    // 管理者導向管理頁面
+                                    Response.Redirect("~/src/manager_main.aspx");
+                                }
+                                else
+                                {
+                                    // 一般用戶導向主頁面
+                                    Response.Redirect("~/src/main.aspx");
+                                }
                             }
                             else
                             {
@@ -81,7 +95,6 @@ namespace _BookKeeping
                     }
                 }
             }
-
         }
     }
 }
