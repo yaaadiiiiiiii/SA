@@ -16,10 +16,11 @@ namespace _BookKeeping.src
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (!IsPostBack || ViewState["NeedRefresh"] != null)
             {
                 LoadFavoriteRecipes();
                 UpdateStatistics();
+                ViewState["NeedRefresh"] = null;
             }
         }
 
@@ -83,7 +84,7 @@ namespace _BookKeeping.src
             catch (Exception ex)
             {
                 // 錯誤處理
-                Response.Write("<script>alert('載入資料時發生錯誤：" + ex.Message + "');</script>");
+                ShowMessage("載入資料時發生錯誤：" + ex.Message, "error");
             }
         }
 
@@ -263,8 +264,8 @@ namespace _BookKeeping.src
             }
             catch (Exception ex)
             {
-                // 統計資訊載入失敗不影響主要功能
-                Response.Write("<script>console.log('載入統計資訊時發生錯誤：" + ex.Message + "');</script>");
+                // 統計資訊載入失敗不影響主要功能，只記錄到控制台
+                System.Diagnostics.Debug.WriteLine("載入統計資訊時發生錯誤：" + ex.Message);
             }
         }
 
@@ -307,20 +308,18 @@ namespace _BookKeeping.src
                     if (selectedIds.Count > 0)
                     {
                         BulkRemoveFromFavorites(userId, selectedIds);
-                        LoadFavoriteRecipes();
-                        UpdateStatistics();
-
-                        Response.Write("<script>alert('成功刪除 " + selectedIds.Count + " 個收藏項目');</script>");
+                        RefreshPage();
+                        ShowMessage("成功刪除 " + selectedIds.Count + " 個收藏項目", "success");
                     }
                 }
                 else
                 {
-                    Response.Write("<script>alert('請選擇要刪除的項目');</script>");
+                    ShowMessage("請選擇要刪除的項目", "warning");
                 }
             }
             catch (Exception ex)
             {
-                Response.Write("<script>alert('批量刪除時發生錯誤：" + ex.Message + "');</script>");
+                ShowMessage("批量刪除時發生錯誤：" + ex.Message, "error");
             }
         }
 
@@ -335,7 +334,7 @@ namespace _BookKeeping.src
                 int recipeIdInt;
                 if (!int.TryParse(recipeId, out recipeIdInt))
                 {
-                    Response.Write("<script>alert('食譜ID格式錯誤');</script>");
+                    ShowMessage("食譜ID格式錯誤", "error");
                     return;
                 }
 
@@ -352,20 +351,19 @@ namespace _BookKeeping.src
 
                         if (result > 0)
                         {
-                            LoadFavoriteRecipes();
-                            UpdateStatistics();
-                            Response.Write("<script>alert('已成功移除收藏');</script>");
+                            RefreshPage();
+                            ShowMessage("已成功移除收藏", "success");
                         }
                         else
                         {
-                            Response.Write("<script>alert('移除收藏失敗');</script>");
+                            ShowMessage("移除收藏失敗", "error");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Response.Write("<script>alert('移除收藏時發生錯誤：" + ex.Message + "');</script>");
+                ShowMessage("移除收藏時發生錯誤：" + ex.Message, "error");
             }
         }
 
@@ -417,7 +415,7 @@ namespace _BookKeeping.src
                 int recipeIdInt;
                 if (!int.TryParse(recipeId, out recipeIdInt))
                 {
-                    Response.Write("<script>alert('食譜ID格式錯誤');</script>");
+                    ShowMessage("食譜ID格式錯誤", "error");
                     return;
                 }
 
@@ -445,15 +443,37 @@ namespace _BookKeeping.src
 
                     // 清空評論框並重新載入資料
                     commentTextBox.Text = "";
-                    LoadFavoriteRecipes();
-
-                    Response.Write("<script>alert('評論已新增');</script>");
+                    RefreshPage();
+                    ShowMessage("評論已新增", "success");
+                }
+                else
+                {
+                    ShowMessage("請輸入評論內容", "warning");
                 }
             }
             catch (Exception ex)
             {
-                Response.Write("<script>alert('新增評論時發生錯誤：" + ex.Message + "');</script>");
+                ShowMessage("新增評論時發生錯誤：" + ex.Message, "error");
             }
+        }
+
+        // 新增：統一的訊息顯示方法
+        private void ShowMessage(string message, string type = "info")
+        {
+            string alertType = type == "error" ? "error" :
+                              type == "success" ? "success" :
+                              type == "warning" ? "warning" : "info";
+
+            ClientScript.RegisterStartupScript(this.GetType(), "showMessage",
+                $"alert('{message}');", true);
+        }
+
+        // 新增：強制重新整理頁面資料的方法
+        private void RefreshPage()
+        {
+            ViewState["NeedRefresh"] = true;
+            LoadFavoriteRecipes();
+            UpdateStatistics();
         }
     }
 }
