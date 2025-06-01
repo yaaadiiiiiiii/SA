@@ -145,7 +145,8 @@
     <Content Include="src\bookkeeping_search.aspx" />
     <Content Include="src\browse_recipe.aspx" />
     <Content Include="src\DBtest.aspx" />
-    <Content Include="src\favorite.aspx" />
+    <Content Include="src\ingredient_manager.aspx" />
+    <Content Include="src\recipe_manager.aspx" />
     <Content Include="src\images\ach.png" />
     <Content Include="src\images\ach_bg.png" />
     <Content Include="src\images\back.png" />
@@ -298,6 +299,7 @@
     <Content Include="src\images\review_button.png" />
     <Content Include="src\images\setting.png" />
     <Content Include="src\login.aspx" />
+    <Content Include="src\manager_main.aspx" />
     <Content Include="src\main.aspx" />
     <Content Include="src\register.aspx" />
     <Content Include="src\styles.css" />
@@ -340,19 +342,19 @@
     <Compile Include="src\DBtest.aspx.designer.cs">
       <DependentUpon>DBtest.aspx</DependentUpon>
     </Compile>
-    <Compile Include="src\favorite.aspx.cs">
-      <DependentUpon>favorite.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="src\favorite.aspx.designer.cs">
-      <DependentUpon>favorite.aspx</DependentUpon>
-    </Compile>
     <Compile Include="src\login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="src\login.aspx.designer.cs">
       <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="src\manager_main.aspx.cs">
+      <DependentUpon>manager_main.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="src\manager_main.aspx.designer.cs">
+      <DependentUpon>manager_main.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\main.aspx.cs">
       <DependentUpon>main.aspx</DependentUpon>
