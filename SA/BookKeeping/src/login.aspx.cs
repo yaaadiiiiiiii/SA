@@ -28,7 +28,7 @@ namespace _BookKeeping
                 return; // Don't proceed with login
             }
 
-            string sql = "SELECT * FROM `112-112502`.user WHERE BINARY user_id = @userid AND password = @password";
+            string sql = "SELECT * FROM `sa`.user WHERE BINARY user_id = @userid AND password = @password";
             string connection = ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
 
             using (MySqlConnection conn = new MySqlConnection(connection))
@@ -51,6 +51,7 @@ namespace _BookKeeping
                             if (reader.Read())
                             {
                                 Session["UserID"] = UserAcc.Text;
+                                Session["UserName"] = reader["user_name"].ToString(); 
                                 // 成功
                                 Response.Redirect("~/src/main.aspx");
                             }

@@ -6,13 +6,13 @@
 <head runat="server">
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>記帳趣 Login</title>
+    <title>食在當季 Login</title>
 </head>
         
 <body>
     <div class="LogBody">
     <form class="LogForm" id="form1" runat="server">
-        <h1 class="LogTitle" align="center">記帳趣</h1>
+        <h1 class="LogTitle" align="center">食在當季</h1>
         <div class="LogText">
         <p>
             <label style="font-size:25px;">帳號</label>

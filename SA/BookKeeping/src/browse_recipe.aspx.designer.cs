@@ -7,11 +7,11 @@
 // </自動產生>
 //------------------------------------------------------------------------------
 
-namespace _BookKeeping
+namespace _BookKeeping.src
 {
 
 
-    public partial class main
+    public partial class browse_recipe
     {
 
         /// <summary>
@@ -24,48 +24,57 @@ namespace _BookKeeping
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// UserNameLabel 控制項。
+        /// ScriptManager1 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label UserNameLabel;
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
-        /// AddRecipeBtn 控制項。
+        /// SearchTextBox 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button AddRecipeBtn;
+        protected global::System.Web.UI.WebControls.TextBox SearchTextBox;
 
         /// <summary>
-        /// BrowseRecipeBtn 控制項。
+        /// SearchButton 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button BrowseRecipeBtn;
+        protected global::System.Web.UI.WebControls.Button SearchButton;
 
         /// <summary>
-        /// FavoriteBtn 控制項。
+        /// RecipeUpdatePanel 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button FavoriteBtn;
+        protected global::System.Web.UI.UpdatePanel RecipeUpdatePanel;
 
         /// <summary>
-        /// LogoutBtn 控制項。
+        /// RecipeRepeater 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button LogoutBtn;
+        protected global::System.Web.UI.WebControls.Repeater RecipeRepeater;
+
+        /// <summary>
+        /// NoRecipesLabel 控制項。
+        /// </summary>
+        /// <remarks>
+        /// 自動產生的欄位。
+        /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label NoRecipesLabel;
     }
 }

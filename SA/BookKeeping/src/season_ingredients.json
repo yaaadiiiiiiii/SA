@@ -1,0 +1,373 @@
+[
+  {
+    "Month": 1,
+    "Season": "冬季",
+    "Name": "高麗菜"
+  },
+  {
+    "Month": 1,
+    "Season": "冬季",
+    "Name": "白蘿蔔"
+  },
+  {
+    "Month": 1,
+    "Season": "冬季",
+    "Name": "芹菜"
+  },
+  {
+    "Month": 1,
+    "Season": "冬季",
+    "Name": "花椰菜"
+  },
+  {
+    "Month": 1,
+    "Season": "冬季",
+    "Name": "菠菜"
+  },
+  {
+    "Month": 1,
+    "Season": "冬季",
+    "Name": "芥菜"
+  },
+
+  {
+    "Month": 2,
+    "Season": "冬季",
+    "Name": "菠菜"
+  },
+  {
+    "Month": 2,
+    "Season": "冬季",
+    "Name": "芥菜"
+  },
+  {
+    "Month": 2,
+    "Season": "冬季",
+    "Name": "青江菜"
+  },
+  {
+    "Month": 2,
+    "Season": "冬季",
+    "Name": "胡蘿蔔"
+  },
+  {
+    "Month": 2,
+    "Season": "冬季",
+    "Name": "柑橘"
+  },
+  {
+    "Month": 2,
+    "Season": "冬季",
+    "Name": "白蘿蔔"
+  },
+
+  {
+    "Month": 3,
+    "Season": "春季",
+    "Name": "蘆筍"
+  },
+  {
+    "Month": 3,
+    "Season": "春季",
+    "Name": "青蒜"
+  },
+  {
+    "Month": 3,
+    "Season": "春季",
+    "Name": "番茄"
+  },
+  {
+    "Month": 3,
+    "Season": "春季",
+    "Name": "花椰菜"
+  },
+  {
+    "Month": 3,
+    "Season": "春季",
+    "Name": "茼蒿"
+  },
+  {
+    "Month": 3,
+    "Season": "春季",
+    "Name": "青蔥"
+  },
+
+  {
+    "Month": 4,
+    "Season": "春季",
+    "Name": "小黃瓜"
+  },
+  {
+    "Month": 4,
+    "Season": "春季",
+    "Name": "番茄"
+  },
+  {
+    "Month": 4,
+    "Season": "春季",
+    "Name": "綠竹筍"
+  },
+  {
+    "Month": 4,
+    "Season": "春季",
+    "Name": "蘆筍"
+  },
+  {
+    "Month": 4,
+    "Season": "春季",
+    "Name": "茄子"
+  },
+  {
+    "Month": 4,
+    "Season": "春季",
+    "Name": "胡瓜"
+  },
+
+  {
+    "Month": 5,
+    "Season": "春季",
+    "Name": "玉米"
+  },
+  {
+    "Month": 5,
+    "Season": "春季",
+    "Name": "小黃瓜"
+  },
+  {
+    "Month": 5,
+    "Season": "春季",
+    "Name": "青椒"
+  },
+  {
+    "Month": 5,
+    "Season": "春季",
+    "Name": "絲瓜"
+  },
+  {
+    "Month": 5,
+    "Season": "春季",
+    "Name": "茄子"
+  },
+  {
+    "Month": 5,
+    "Season": "春季",
+    "Name": "南瓜"
+  },
+
+  {
+    "Month": 6,
+    "Season": "夏季",
+    "Name": "絲瓜"
+  },
+  {
+    "Month": 6,
+    "Season": "夏季",
+    "Name": "黃瓜"
+  },
+  {
+    "Month": 6,
+    "Season": "夏季",
+    "Name": "苦瓜"
+  },
+  {
+    "Month": 6,
+    "Season": "夏季",
+    "Name": "番茄"
+  },
+  {
+    "Month": 6,
+    "Season": "夏季",
+    "Name": "芒果"
+  },
+  {
+    "Month": 6,
+    "Season": "夏季",
+    "Name": "荔枝"
+  },
+
+  {
+    "Month": 7,
+    "Season": "夏季",
+    "Name": "苦瓜"
+  },
+  {
+    "Month": 7,
+    "Season": "夏季",
+    "Name": "茄子"
+  },
+  {
+    "Month": 7,
+    "Season": "夏季",
+    "Name": "鳳梨"
+  },
+  {
+    "Month": 7,
+    "Season": "夏季",
+    "Name": "芒果"
+  },
+  {
+    "Month": 7,
+    "Season": "夏季",
+    "Name": "龍眼"
+  },
+  {
+    "Month": 7,
+    "Season": "夏季",
+    "Name": "筊白筍"
+  },
+
+  {
+    "Month": 8,
+    "Season": "夏季",
+    "Name": "茄子"
+  },
+  {
+    "Month": 8,
+    "Season": "夏季",
+    "Name": "空心菜"
+  },
+  {
+    "Month": 8,
+    "Season": "夏季",
+    "Name": "秋葵"
+  },
+  {
+    "Month": 8,
+    "Season": "夏季",
+    "Name": "甜椒"
+  },
+  {
+    "Month": 8,
+    "Season": "夏季",
+    "Name": "香蕉"
+  },
+  {
+    "Month": 8,
+    "Season": "夏季",
+    "Name": "芭樂"
+  },
+
+  {
+    "Month": 9,
+    "Season": "秋季",
+    "Name": "菱角"
+  },
+  {
+    "Month": 9,
+    "Season": "秋季",
+    "Name": "蓮藕"
+  },
+  {
+    "Month": 9,
+    "Season": "秋季",
+    "Name": "香菇"
+  },
+  {
+    "Month": 9,
+    "Season": "秋季",
+    "Name": "柚子"
+  },
+  {
+    "Month": 9,
+    "Season": "秋季",
+    "Name": "地瓜葉"
+  },
+  {
+    "Month": 9,
+    "Season": "秋季",
+    "Name": "栗子"
+  },
+
+  {
+    "Month": 10,
+    "Season": "秋季",
+    "Name": "高麗菜"
+  },
+  {
+    "Month": 10,
+    "Season": "秋季",
+    "Name": "南瓜"
+  },
+  {
+    "Month": 10,
+    "Season": "秋季",
+    "Name": "地瓜"
+  },
+  {
+    "Month": 10,
+    "Season": "秋季",
+    "Name": "芋頭"
+  },
+  {
+    "Month": 10,
+    "Season": "秋季",
+    "Name": "柿子"
+  },
+  {
+    "Month": 10,
+    "Season": "秋季",
+    "Name": "杏鮑菇"
+  },
+
+  {
+    "Month": 11,
+    "Season": "秋季",
+    "Name": "高麗菜"
+  },
+  {
+    "Month": 11,
+    "Season": "秋季",
+    "Name": "白蘿蔔"
+  },
+  {
+    "Month": 11,
+    "Season": "秋季",
+    "Name": "芋頭"
+  },
+  {
+    "Month": 11,
+    "Season": "秋季",
+    "Name": "柿子"
+  },
+  {
+    "Month": 11,
+    "Season": "秋季",
+    "Name": "茼蒿"
+  },
+  {
+    "Month": 11,
+    "Season": "秋季",
+    "Name": "胡蘿蔔"
+  },
+
+  {
+    "Month": 12,
+    "Season": "冬季",
+    "Name": "白蘿蔔"
+  },
+  {
+    "Month": 12,
+    "Season": "冬季",
+    "Name": "菠菜"
+  },
+  {
+    "Month": 12,
+    "Season": "冬季",
+    "Name": "芥菜"
+  },
+  {
+    "Month": 12,
+    "Season": "冬季",
+    "Name": "高麗菜"
+  },
+  {
+    "Month": 12,
+    "Season": "冬季",
+    "Name": "香菜"
+  },
+  {
+    "Month": 12,
+    "Season": "冬季",
+    "Name": "花椰菜"
+  }
+]

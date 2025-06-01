@@ -7,11 +7,11 @@
 // </自動產生>
 //------------------------------------------------------------------------------
 
-namespace _BookKeeping
+namespace _BookKeeping.src
 {
 
 
-    public partial class register
+    public partial class add_recipe
     {
 
         /// <summary>
@@ -24,84 +24,111 @@ namespace _BookKeeping
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// RegNickname 控制項。
+        /// MessagePanel 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox RegNickname;
+        protected global::System.Web.UI.WebControls.Panel MessagePanel;
 
         /// <summary>
-        /// RegAcc 控制項。
+        /// MessageLabel 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox RegAcc;
+        protected global::System.Web.UI.WebControls.Label MessageLabel;
 
         /// <summary>
-        /// RegPwd 控制項。
+        /// RecipeTitleTextBox 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox RegPwd;
+        protected global::System.Web.UI.WebControls.TextBox RecipeTitleTextBox;
 
         /// <summary>
-        /// HiddenAccount 控制項。
+        /// RecipeDescriptionTextBox 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenAccount;
+        protected global::System.Web.UI.WebControls.TextBox RecipeDescriptionTextBox;
 
         /// <summary>
-        /// HiddenPassword 控制項。
+        /// RecipeStepsTextBox 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenPassword;
+        protected global::System.Web.UI.WebControls.TextBox RecipeStepsTextBox;
 
         /// <summary>
-        /// HiddenField1 控制項。
+        /// IngredientName1 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenField1;
+        protected global::System.Web.UI.WebControls.TextBox IngredientName1;
 
         /// <summary>
-        /// ReRegPwd 控制項。
+        /// IngredientQuantity1 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox ReRegPwd;
+        protected global::System.Web.UI.WebControls.TextBox IngredientQuantity1;
 
         /// <summary>
-        /// Button1 控制項。
+        /// IngredientCountHidden 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.WebControls.HiddenField IngredientCountHidden;
 
         /// <summary>
-        /// Button2 控制項。
+        /// RecipeImageUpload 控制項。
         /// </summary>
         /// <remarks>
         /// 自動產生的欄位。
         /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
+        protected global::System.Web.UI.WebControls.FileUpload RecipeImageUpload;
+
+        /// <summary>
+        /// SaveRecipeBtn 控制項。
+        /// </summary>
+        /// <remarks>
+        /// 自動產生的欄位。
+        /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button SaveRecipeBtn;
+
+        /// <summary>
+        /// BackToMainBtn 控制項。
+        /// </summary>
+        /// <remarks>
+        /// 自動產生的欄位。
+        /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button BackToMainBtn;
+
+        /// <summary>
+        /// CancelBtn 控制項。
+        /// </summary>
+        /// <remarks>
+        /// 自動產生的欄位。
+        /// 若要修改，請將欄位宣告從設計工具檔案移到程式碼後置檔案。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button CancelBtn;
     }
 }
