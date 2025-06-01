@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Microsoft JhengHei', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #9c88ff 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -188,29 +188,15 @@
             border-color: #667eea;
         }
 
-        .favorite-badge {
+        .seasonal-badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: linear-gradient(145deg, #ffa726, #ff8f00);
+            background: linear-gradient(145deg, #4ecdc4, #44a08d);
             color: white;
             padding: 8px 15px;
             border-radius: 20px;
             font-size: 0.9em;
-            font-weight: bold;
-            z-index: 10;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
-        .seasonal-badge {
-            position: absolute;
-            top: 55px;
-            right: 15px;
-            background: linear-gradient(145deg, #4ecdc4, #44a08d);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.8em;
             font-weight: bold;
             z-index: 10;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
@@ -257,21 +243,6 @@
             font-size: 0.9em;
             color: #777;
             margin-bottom: 15px;
-        }
-
-        .recipe-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 0.85em;
-            color: #999;
-        }
-
-        .favorite-date {
-            background: #f8f9fa;
-            padding: 5px 10px;
-            border-radius: 10px;
         }
 
         .recipe-steps {
@@ -587,14 +558,10 @@
                                     name="selectedRecipes" value='<%# Eval("recipe_id") %>' 
                                     style="display: none;" />
                                 
-                                <div class="favorite-badge">
-                                    ⭐ 我的最愛
-                                </div>
-                                
                                 <asp:Panel ID="SeasonalBadgePanel" runat="server" 
                                     CssClass="seasonal-badge" 
                                     Visible='<%# (bool)Eval("IsSeasonal") %>'>
-                                    🌟 當季
+                                    🌟 當季推薦
                                 </asp:Panel>
                                 
                                 <asp:Image ID="RecipeImage" runat="server" 
@@ -609,12 +576,6 @@
                                 <div class="recipe-description"><%# Eval("description") %></div>
                                 <div class="recipe-ingredients">
                                     <strong>食材：</strong><%# Eval("ingredients") %>
-                                </div>
-                                
-                                <div class="recipe-meta">
-                                    <div class="favorite-date">
-                                        ❤️ 收藏於 <%# Convert.ToDateTime(Eval("favorite_date")).ToString("yyyy/MM/dd") %>
-                                    </div>
                                 </div>
                                 
                                 <div id="recipe-steps-<%# Eval("recipe_id") %>" class="recipe-steps">

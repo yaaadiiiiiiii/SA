@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using MySql.Data.MySqlClient; // 改用 MySQL
+using MySql.Data.MySqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Text;
 
 namespace _BookKeeping.src
 {
     public partial class favorite : System.Web.UI.Page
     {
-        // 資料庫連接字串 - 修正為正確的連接字串名稱
+        // 資料庫連接字串
         private string connectionString = ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -33,7 +34,7 @@ namespace _BookKeeping.src
                     return;
                 }
 
-                string userId = Session["UserId"].ToString(); // 改為 string
+                string userId = Session["UserId"].ToString();
                 string searchText = FilterTextBox.Text.Trim();
                 string sortBy = SortDropDown.SelectedValue;
 
@@ -44,6 +45,7 @@ namespace _BookKeeping.src
                     // 為每筆資料增加額外的欄位
                     favoriteRecipes.Columns.Add("IsSeasonal", typeof(bool));
                     favoriteRecipes.Columns.Add("Comments", typeof(DataTable));
+                    favoriteRecipes.Columns.Add("ingredients", typeof(string));
 
                     foreach (DataRow row in favoriteRecipes.Rows)
                     {
@@ -56,6 +58,8 @@ namespace _BookKeeping.src
                         if (int.TryParse(row["recipe_id"].ToString(), out recipeId))
                         {
                             row["Comments"] = GetRecipeComments(recipeId);
+                            // 載入食材資訊
+                            row["ingredients"] = GetRecipeIngredients(recipeId);
                         }
                     }
 
@@ -95,14 +99,13 @@ namespace _BookKeeping.src
                         r.recipe_id,
                         r.title,
                         r.description,
-                        r.ingredients,
                         r.steps,
                         r.image,
-                        f.add_date,
+                        f.add_date as favorite_date,
                         u.user_name as author_name
                     FROM recipe r
                     INNER JOIN favorite f ON r.recipe_id = f.recipe_id
-                    LEFT JOIN user u ON r.author_id = u.user_id
+                    LEFT JOIN user u ON r.recipe_id = u.user_id
                     WHERE f.user_id = @UserId
                 ";
 
@@ -145,13 +148,48 @@ namespace _BookKeeping.src
             return dt;
         }
 
+        private string GetRecipeIngredients(int recipeId)
+        {
+            StringBuilder ingredientsList = new StringBuilder();
+
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                string sql = @"
+                    SELECT food_name, quantity
+                    FROM ingredient
+                    WHERE recipe_id = @RecipeId
+                    ORDER BY ingredient_id
+                ";
+
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@RecipeId", recipeId);
+
+                    conn.Open();
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (ingredientsList.Length > 0)
+                                ingredientsList.Append("、");
+
+                            ingredientsList.Append(reader["food_name"].ToString());
+                            ingredientsList.Append(" ");
+                            ingredientsList.Append(reader["quantity"].ToString());
+                        }
+                    }
+                }
+            }
+
+            return ingredientsList.Length > 0 ? ingredientsList.ToString() : "暂无食材資訊";
+        }
+
         private DataTable GetRecipeComments(int recipeId)
         {
             DataTable dt = new DataTable();
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString)) // 改用 MySQL
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
-                // 修正 SQL 查詢 - 根據實際資料表結構調整
                 string sql = @"
                     SELECT 
                         c.content,
@@ -164,12 +202,12 @@ namespace _BookKeeping.src
                     LIMIT 5
                 ";
 
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn)) // 改用 MySQL
+                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@RecipeId", recipeId);
 
                     conn.Open();
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd); // 改用 MySQL
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                     adapter.Fill(dt);
                 }
             }
@@ -190,15 +228,15 @@ namespace _BookKeeping.src
             {
                 if (Session["UserId"] == null) return;
 
-                string userId = Session["UserId"].ToString(); // 改為 string
+                string userId = Session["UserId"].ToString();
 
-                using (MySqlConnection conn = new MySqlConnection(connectionString)) // 改用 MySQL
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
 
                     // 總收藏數
                     string totalSql = "SELECT COUNT(*) FROM favorite WHERE user_id = @UserId";
-                    using (MySqlCommand cmd = new MySqlCommand(totalSql, conn)) // 改用 MySQL
+                    using (MySqlCommand cmd = new MySqlCommand(totalSql, conn))
                     {
                         cmd.Parameters.AddWithValue("@UserId", userId);
                         int totalCount = Convert.ToInt32(cmd.ExecuteScalar());
@@ -215,7 +253,7 @@ namespace _BookKeeping.src
                         AND YEAR(add_date) = YEAR(CURDATE()) 
                         AND MONTH(add_date) = MONTH(CURDATE())
                     ";
-                    using (MySqlCommand cmd = new MySqlCommand(recentSql, conn)) // 改用 MySQL
+                    using (MySqlCommand cmd = new MySqlCommand(recentSql, conn))
                     {
                         cmd.Parameters.AddWithValue("@UserId", userId);
                         int recentCount = Convert.ToInt32(cmd.ExecuteScalar());
@@ -256,7 +294,7 @@ namespace _BookKeeping.src
             {
                 if (Session["UserId"] == null) return;
 
-                string userId = Session["UserId"].ToString(); // 改為 string
+                string userId = Session["UserId"].ToString();
                 List<string> selectedIds = new List<string>();
 
                 // 從前端 JavaScript 取得選中的食譜ID
@@ -292,7 +330,7 @@ namespace _BookKeeping.src
             {
                 if (Session["UserId"] == null) return;
 
-                string userId = Session["UserId"].ToString(); // 改為 string
+                string userId = Session["UserId"].ToString();
 
                 int recipeIdInt;
                 if (!int.TryParse(recipeId, out recipeIdInt))
@@ -301,10 +339,10 @@ namespace _BookKeeping.src
                     return;
                 }
 
-                using (MySqlConnection conn = new MySqlConnection(connectionString)) // 改用 MySQL
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     string sql = "DELETE FROM favorite WHERE user_id = @UserId AND recipe_id = @RecipeId";
-                    using (MySqlCommand cmd = new MySqlCommand(sql, conn)) // 改用 MySQL
+                    using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@UserId", userId);
                         cmd.Parameters.AddWithValue("@RecipeId", recipeIdInt);
@@ -333,10 +371,10 @@ namespace _BookKeeping.src
 
         private void BulkRemoveFromFavorites(string userId, List<string> recipeIds)
         {
-            using (MySqlConnection conn = new MySqlConnection(connectionString)) // 改用 MySQL
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
             {
                 conn.Open();
-                using (MySqlTransaction transaction = conn.BeginTransaction()) // 改用 MySQL
+                using (MySqlTransaction transaction = conn.BeginTransaction())
                 {
                     try
                     {
@@ -346,7 +384,7 @@ namespace _BookKeeping.src
                             if (int.TryParse(recipeId, out recipeIdInt))
                             {
                                 string sql = "DELETE FROM favorite WHERE user_id = @UserId AND recipe_id = @RecipeId";
-                                using (MySqlCommand cmd = new MySqlCommand(sql, conn, transaction)) // 改用 MySQL
+                                using (MySqlCommand cmd = new MySqlCommand(sql, conn, transaction))
                                 {
                                     cmd.Parameters.AddWithValue("@UserId", userId);
                                     cmd.Parameters.AddWithValue("@RecipeId", recipeIdInt);
@@ -372,7 +410,7 @@ namespace _BookKeeping.src
             {
                 if (Session["UserId"] == null) return;
 
-                string userId = Session["UserId"].ToString(); // 改為 string
+                string userId = Session["UserId"].ToString();
                 RepeaterItem item = e.Item;
                 TextBox commentTextBox = item.FindControl("CommentTextBox") as TextBox;
 
@@ -387,13 +425,13 @@ namespace _BookKeeping.src
                 {
                     string comment = commentTextBox.Text.Trim();
 
-                    using (MySqlConnection conn = new MySqlConnection(connectionString)) // 改用 MySQL
+                    using (MySqlConnection conn = new MySqlConnection(connectionString))
                     {
                         string sql = @"
                             INSERT INTO comment (recipe_id, user_id, content, created_date) 
                             VALUES (@RecipeId, @UserId, @Content, @CreatedDate)
                         ";
-                        using (MySqlCommand cmd = new MySqlCommand(sql, conn)) // 改用 MySQL
+                        using (MySqlCommand cmd = new MySqlCommand(sql, conn))
                         {
                             cmd.Parameters.AddWithValue("@RecipeId", recipeIdInt);
                             cmd.Parameters.AddWithValue("@UserId", userId);

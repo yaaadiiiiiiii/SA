@@ -343,7 +343,7 @@
     <Compile Include="src\DBtest.aspx.designer.cs">
       <DependentUpon>DBtest.aspx</DependentUpon>
     </Compile>
-    <Compile Include="src\favorite.aspx.cs">Add commentMore actions
+    <Compile Include="src\favorite.aspx.cs">
       <DependentUpon>favorite.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
