@@ -145,6 +145,7 @@
     <Content Include="src\bookkeeping_search.aspx" />
     <Content Include="src\browse_recipe.aspx" />
     <Content Include="src\DBtest.aspx" />
+    <Content Include="src\favorite.aspx" />
     <Content Include="src\ingredient_manage.aspx" />
     <Content Include="src\recipe_manage.aspx" />
     <Content Include="src\images\ach.png" />
@@ -302,7 +303,6 @@
     <Content Include="src\manager_main.aspx" />
     <Content Include="src\main.aspx" />
     <Content Include="src\register.aspx" />
-    <Content Include="src\favorite.aspx" />
     <Content Include="src\styles.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -342,6 +342,13 @@
     </Compile>
     <Compile Include="src\DBtest.aspx.designer.cs">
       <DependentUpon>DBtest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="src\favorite.aspx.cs">Add commentMore actions
+      <DependentUpon>favorite.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="src\favorite.aspx.designer.cs">
+      <DependentUpon>favorite.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\ingredient_manage.aspx.cs">
       <DependentUpon>ingredient_manage.aspx</DependentUpon>
