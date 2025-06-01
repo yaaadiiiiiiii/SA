@@ -302,6 +302,7 @@
     <Content Include="src\manager_main.aspx" />
     <Content Include="src\main.aspx" />
     <Content Include="src\register.aspx" />
+    <Content Include="src\favorite.aspx" />
     <Content Include="src\styles.css" />
     <Content Include="Web.config" />
   </ItemGroup>
