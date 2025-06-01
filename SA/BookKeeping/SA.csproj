@@ -145,6 +145,7 @@
     <Content Include="src\bookkeeping_search.aspx" />
     <Content Include="src\browse_recipe.aspx" />
     <Content Include="src\DBtest.aspx" />
+    <Content Include="src\favorite.aspx" />
     <Content Include="src\images\ach.png" />
     <Content Include="src\images\ach_bg.png" />
     <Content Include="src\images\back.png" />
@@ -338,6 +339,13 @@
     </Compile>
     <Compile Include="src\DBtest.aspx.designer.cs">
       <DependentUpon>DBtest.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="src\favorite.aspx.cs">
+      <DependentUpon>favorite.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="src\favorite.aspx.designer.cs">
+      <DependentUpon>favorite.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
