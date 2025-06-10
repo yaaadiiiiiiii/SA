@@ -29,7 +29,7 @@ namespace _BookKeeping.src
             try
             {
                 // 檢查使用者是否已登入
-                if (Session["UserId"] == null)
+                if (Session["UserID"] == null)
                 {
                     Response.Redirect("~/login.aspx");
                     return;
@@ -54,6 +54,11 @@ namespace _BookKeeping.src
                         // 暫時設為 false
                         row["IsSeasonal"] = false;
 
+                        // 原本的處理...
+                        // 處理圖片路徑
+                        string imageFromDB = row["image"].ToString();
+                        row["image"] = ProcessImagePath(imageFromDB);
+                        // 其它資料處理
                         // 載入該食譜的評論
                         int recipeId;
                         if (int.TryParse(row["recipe_id"].ToString(), out recipeId))
@@ -288,6 +293,28 @@ namespace _BookKeeping.src
                     break;
             }
         }
+
+        private string ProcessImagePath(string imageFromDB)
+        {
+            if (string.IsNullOrEmpty(imageFromDB) || string.IsNullOrWhiteSpace(imageFromDB))
+            {
+                return "~/src/recipes/default_recipe.jpg";
+            }
+            if (imageFromDB.StartsWith("src/recipes/"))
+            {
+                return "~/" + imageFromDB;
+            }
+            if (!imageFromDB.Contains("/") && !string.IsNullOrEmpty(imageFromDB))
+            {
+                return "~/src/recipes/" + imageFromDB;
+            }
+            if (string.IsNullOrEmpty(imageFromDB) || imageFromDB.Trim() == "")
+            {
+                return "~/src/recipes/default_recipe.jpg";
+            }
+            return "~/" + imageFromDB.TrimStart('/');
+        }
+
 
         protected void BulkDeleteButton_Click(object sender, EventArgs e)
         {
